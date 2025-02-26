@@ -20,7 +20,7 @@ class KpspiderSpider(scrapy.Spider):
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
             ],
-            "headless": True,
+            "headless": False,
         },
         "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
     }

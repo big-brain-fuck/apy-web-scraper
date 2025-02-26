@@ -88,6 +88,41 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 # Set settings whose default value is deprecated to a future-proof value
-REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+
+# settings.py
+DOWNLOAD_HANDLERS = {
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+}
+
+# settings.py
+DOWNLOADER_MIDDLEWARES = {
+ 'scrapy_playwright.middlewares.PlaywrightMiddleware': 100,
+}
+PLAYWRIGHT_BROWSER_TYPE = "chromium"
+PLAYWRIGHT_LAUNCH_OPTIONS = {'headless': False}
+
+ITEM_PIPELINES = {
+    "dz2.pipelines.MongoDBPipeline": 300,
+    "dz2.pipelines.PhotoDownloaderPipeline": 200,
+}
+
+# MongoDB
+MONGO_URI = "mongodb://localhost:27017"
+MONGO_DATABASE = "news_db"
+MONGO_COLLECTION = "news"
+
+RESULT_IMAGE_QUALITY = 35
+
+import logging
+from scrapy.utils.log import configure_logging
+
+configure_logging(install_root_handler=False)
+logging.basicConfig(
+    filename="scrapy_debug.log",
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    level=logging.DEBUG
+)
