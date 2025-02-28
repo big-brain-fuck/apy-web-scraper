@@ -1,11 +1,11 @@
 import scrapy
-
+from scrapy.selector import Selector
 
 class KpspiderSpider(scrapy.Spider):
     name = "KpSpider"
     allowed_domains = ["kp.ru"]
     start_urls = ["https://www.kp.ru/online"]
-    REQUIRED_QUANTITY = 10000
+    REQUIRED_QUANTITY = 30
 
     custom_settings = {
         "TWISTED_REACTOR": "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
@@ -20,7 +20,7 @@ class KpspiderSpider(scrapy.Spider):
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
             ],
-            "headless": False,
+            "headless": True,
         },
         "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
     }
@@ -53,7 +53,7 @@ class KpspiderSpider(scrapy.Spider):
                 selector = Selector(text=content)
 
 
-                articles = selector.xpath('//a[contains(@class, "sc-1tputnk-3 drlShK")]')
+                articles = selector.xpath('//a[contains(@class, "sc-1tputnk-2 drlShK")]')
                 current_articles = articles[: self.REQUIRED_QUANTITY - self.article_count]
                 self.logger.info(f"Найдено {len(current_articles)} статей.")
 
